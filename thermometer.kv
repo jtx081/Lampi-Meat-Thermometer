@@ -1,4 +1,11 @@
 #:kivy 1.9
 
-Label:
-  text: "test"
+BoxLayout:
+  orientation: 'vertical'
+  Label:
+    size_hint_y: 0.3
+    text: 'Meat Temperature:'
+  Label:
+    size_hint_y: 0.7
+    font_size: 25
+    text: app.display_text
