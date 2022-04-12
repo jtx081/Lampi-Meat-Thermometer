@@ -5,7 +5,7 @@ struct LampiView: View {
     
 
     var body: some View {
-        let brightness = Double(round(lamp.state.brightness * 1000) / 1000)
+        let brightness = Int(lamp.state.brightness)
         
         VStack {
             Text("\(brightness)").padding()
