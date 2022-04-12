@@ -6,7 +6,7 @@ var CHARACTERISTIC_NAME = 'Temp';
 function TempCharacteristic(lampiState) {
   TempCharacteristic.super_.call(this, {
     uuid: '0003A7D3-D8A4-4FEA-8174-1736E808C066',
-    properties: ['read'],
+    properties: ['read', 'notify'],
     secure: [],
     descriptors: [
         new bleno.Descriptor({
@@ -27,10 +27,10 @@ function TempCharacteristic(lampiState) {
     if( this._update !== null ) {
         console.log('updating new brightness uuid=', this.uuid);
         var data = new Buffer(1);
-        data.writeUInt8(Math.round(brightness));
+        data.writeUInt8(brightness);
         this._update(data);
     } 
-    }
+  }
 
   this.lampiState = lampiState;
 

@@ -6,7 +6,7 @@ function LampiState() {
     events.EventEmitter.call(this);
 
     // this.is_on = true;
-    this.brightness = 0xFF;
+    this.brightness = 0x00;
     // this.hue = 0xFF;
     // this.saturation = 0xFF;
     this.value = 0xFF;
