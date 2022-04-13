@@ -275,7 +275,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"meat-thermometer/Preview Content\"";
-				DEVELOPMENT_TEAM = G3S6JU89R9;
+				DEVELOPMENT_TEAM = APGQ9MFJ4P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect to Lampi via bluetooth";
@@ -289,7 +289,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Joanna.meat-thermometer";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wonyoung.meat-thermometer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -305,7 +305,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"meat-thermometer/Preview Content\"";
-				DEVELOPMENT_TEAM = G3S6JU89R9;
+				DEVELOPMENT_TEAM = APGQ9MFJ4P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect to Lampi via bluetooth";
@@ -319,7 +319,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Joanna.meat-thermometer";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wonyoung.meat-thermometer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

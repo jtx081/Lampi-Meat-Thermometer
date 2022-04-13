@@ -8,7 +8,8 @@ struct LampiView: View {
         let brightness = Int(lamp.state.brightness)
         
         VStack {
-            Text("\(brightness)").padding()
+            Text("Meat Temperature:").padding().font(.system(size: 30))
+            Text("\(brightness)" + " F").padding().font(.system(size: 56.0))
 //            Text("\(round(lamp.state.brightness * 1000) / 1000.0)")
 //                        .padding()
 //            Rectangle()
@@ -53,8 +54,8 @@ struct LampiView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LampiView(lamp: Lampi(name: "LAMPI b827eb1aabd5"))
-                    .previewDevice("iPhone 12 Pro")
+        LampiView(lamp: Lampi(name: "LAMPI b827ebe4ff09"))
+                    .previewDevice("iPhone 13 Pro")
                     .previewLayout(.device)
     }
 }
