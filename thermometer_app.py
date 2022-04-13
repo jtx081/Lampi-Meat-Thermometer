@@ -8,7 +8,7 @@ import json
 
 class ThermometerApp(App):
 
-    display_text = StringProperty('On sensor start, temp reading goes here') # how to format this?
+    display_text = StringProperty(' ') # how to format this?
 
     def on_start(self):
         #self.mqtt = Client('lamp_temp')
@@ -25,6 +25,5 @@ class ThermometerApp(App):
         self.mqtt.subscribe('test/temperature')
 
     def message_received(self, client, userdata, message):
-        new_temp = round(json.loads(message.payload.decode('utf-8')), 2)
-        #print('new temp: ' + str(new_temp))
+        new_temp = round(json.loads(message.payload.decode('utf-8')))
         self.display_text = '{} F'.format(new_temp)
