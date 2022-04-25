@@ -8,7 +8,7 @@ import json
 
 class ThermometerApp(App):
 
-    display_text = StringProperty(' ') # how to format this?
+    display_text = StringProperty(' 0 F')  # how to format this?
 
     def on_start(self):
         #self.mqtt = Client('lamp_temp')
