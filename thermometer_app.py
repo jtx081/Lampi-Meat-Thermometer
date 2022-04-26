@@ -4,11 +4,47 @@ from kivy.clock import Clock
 
 from paho.mqtt.client import Client
 import json
+from kivy.uix.widget import Widget
+from kivy.properties import ObjectProperty
+from kivy.uix.label import Label
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.popup import Popup
 
+import pigpio
+import time
 
 class ThermometerApp(App):
 
-    display_text = StringProperty(' 0 F')  # how to format this?
+    target_temp = 85
+    display_target_temp = StringProperty("Desired Temperature: " + str(target_temp) + " F")
+    temp = 0
+
+    pi = pigpio.pi()
+
+    # turn off all pins
+    pi.write(13, 0) #blue
+    pi.write(19, 0) #red
+    pi.write(26, 0) #green
+
+    # set PWM range
+    pi.set_PWM_range(13, target_temp)
+    pi.set_PWM_range(19, target_temp)
+    pi.set_PWM_range(26, target_temp)
+
+    display_text = StringProperty('0 F')
+
+    #while True:
+        #pi.write(19, 1) #red
+        #pi.set_PWM_dutycycle(19, (target_temp - temp)/target_temp * target_temp)
+
+
+    # make a popup for done
+    # make an alerting system for temp
+    # need to recieve set temperature from the app
+    # need to send whether the process is done MeatThermometer/Done
+    # figure out how to add sliding bar for the status
+
+    # probe live??
 
     def on_start(self):
         #self.mqtt = Client('lamp_temp')
@@ -20,10 +56,21 @@ class ThermometerApp(App):
         self.mqtt.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
-        #print("Connected with result code "+str(rc))
-
-        self.mqtt.subscribe('test/temperature')
+        self.mqtt.subscribe('test/temperature') #we should change this topic MeatThermometer/Temperature
 
     def message_received(self, client, userdata, message):
         new_temp = round(json.loads(message.payload.decode('utf-8')))
         self.display_text = '{} F'.format(new_temp)
+        self.temp = new_temp
+
+        #popup = MyPopup()
+
+        if (self.temp < self.target_temp):
+            self.pi.set_PWM_dutycycle(19, (self.target_temp - self.temp)/self.target_temp * self.target_temp)
+        else:
+            self.pi.write(19, 0)
+            self.pi.write(26, 1)
+            #popup.open()
+
+            #time.sleep(30)
+            self.pi.write(26, 0)
