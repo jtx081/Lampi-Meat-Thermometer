@@ -12,7 +12,7 @@ def on_connect(client, userdata, flags, rc):
 
 def message_received(client, userdata, message):
   print("Topic: '{}' Payload: '{}'".format(message.topic, message.payload))
-  new_temp = round(json.loads(message.payload.decode('utf-8')), 2)
+  new_temp = round(json.loads(message.payload.decode('utf-8')))
   print('new temp: ' + str(new_temp))
 
 c.on_connect = on_connect

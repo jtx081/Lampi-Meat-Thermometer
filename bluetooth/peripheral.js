@@ -3,7 +3,6 @@ var child_process = require('child_process');
 var device_id = child_process.execSync('cat /sys/class/net/eth0/address | sed s/://g').toString().replace(/\n$/, '');
 
 process.env['BLENO_DEVICE_NAME'] = 'LAMPI ' + device_id;
-// process.env['BLENO_DEVICE_NAME'] = 'LAMPI b827eb1aabd5';
 
 var serviceName = 'LampiService';
 var bleno = require('bleno');
@@ -52,7 +51,6 @@ bleno.on('stateChange', function(state) {
 bleno.on('advertisingStart', function(err) {
   if (!err) {
     console.log('advertising...');
-    console.log(process.env['BLENO_DEVICE_NAME'])
     //
     // Once we are advertising, it's time to set up our services,
     // along with our characteristics.

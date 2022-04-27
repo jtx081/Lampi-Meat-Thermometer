@@ -31,7 +31,7 @@ function LampiState() {
         console.log('connected!');
         mqtt_client.publish(client_connection_topic,
             '1', {qos:2, retain:true})
-        mqtt_client.subscribe('test/temperature');
+        mqtt_client.subscribe('meatthermometer/temperature');
     });
 
     mqtt_client.on('message', function(topic, message) {
@@ -77,7 +77,7 @@ util.inherits(LampiState, events.EventEmitter);
 LampiState.prototype.set_onoff = function(is_on) {
     this.is_on = is_on;
     // var tmp = {'client': this.clientId, 'on': this.is_on };
-    this.mqtt_client.publish('test/goal', String(this.is_on));
+    this.mqtt_client.publish('meatthermometer/goal', String(this.is_on));
     // console.log('is_on = ', this.is_on, ' msg: ', JSON.stringify(tmp));
 };
 
