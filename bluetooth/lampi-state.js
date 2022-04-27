@@ -33,6 +33,7 @@ function LampiState() {
         mqtt_client.publish(client_connection_topic,
             '1', {qos:2, retain:true})
         mqtt_client.subscribe('meatthermometer/temperature');
+        mqtt_client.subscribe('meatthermometer/done')
     });
 
     mqtt_client.on('message', function(topic, message) {

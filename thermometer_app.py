@@ -65,7 +65,7 @@ class ThermometerApp(App):
 
             popupWindow.dismiss() #figure out how to dismiss this
             self.mqtt.publish('meatthermometer/done',
-                          json.dumps('False').encode('utf-8'),
+                          json.dumps(0).encode('utf-8'),
                           qos=1)
 
         else:
@@ -75,7 +75,7 @@ class ThermometerApp(App):
 
             popupWindow.open()
             self.mqtt.publish('meatthermometer/done',
-                          json.dumps('True').encode('utf-8'),
+                          json.dumps(1).encode('utf-8'),
                           qos=1)
 
 
