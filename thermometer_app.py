@@ -53,14 +53,17 @@ class ThermometerApp(App):
         self.mqtt = Client(client_id='temperature_probe')
         self.mqtt.enable_logger()
         self.mqtt.on_connect = self.on_connect
-        self.mqtt.on_message = self.message_received
+        #self.mqtt.on_message = self.message_received
         self.mqtt.connect('localhost', port=1883, keepalive=60)
         self.mqtt.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
         self.mqtt.subscribe('test/temperature') #we should change this topic MeatThermometer/Temperature
+        self.mqtt.subscribe('test/goal')
+        self.mqtt.message_callback_add('test/temperature', self.temp_received)
+        self.mqtt.message_callback_add('test/goal', self.goal_temp_received)
 
-    def message_received(self, client, userdata, message):
+    def temp_received(self, client, userdata, message):
         new_temp = round(json.loads(message.payload.decode('utf-8')))
         self.display_text = '{} F'.format(new_temp)
         self.temp = new_temp
@@ -84,6 +87,9 @@ class ThermometerApp(App):
 
             popupWindow.open()
 
+    def goal_temp_received(self, client, userdata, message):
+        new_goal_temp = round(json.loads(message.payload.decode('utf-8')))
+        self.goal_temp = '{}'.format(new_goal_temp)
 
     pi.write(13, 0)
     pi.write(19, 0)
