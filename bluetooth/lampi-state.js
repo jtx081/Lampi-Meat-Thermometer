@@ -7,6 +7,7 @@ function LampiState() {
 
     this.is_on = 0x00;
     this.brightness = 0x00;
+    this.done = 0x00;
     // this.hue = 0xFF;
     // this.saturation = 0xFF;
     this.value = 0xFF;
@@ -35,38 +36,74 @@ function LampiState() {
     });
 
     mqtt_client.on('message', function(topic, message) {
-        new_state = JSON.parse(message);
-        console.log('NEW STATE: ', new_state);
-        // if the client id matches ours and we have received
-        //   at least one update before
-        if( new_state['client'] == that.clientId
-                && that.has_received_first_update) {
-            console.log("...ignoring lamp changed update that we initiated");
-            return;
+        if (topic === 'meatthermometer/temperature'){
+            new_state = JSON.parse(message);
+            console.log('NEW STATE: ', new_state);
+            // if the client id matches ours and we have received
+            //   at least one update before
+            if( new_state['client'] == that.clientId
+                    && that.has_received_first_update) {
+                console.log("...ignoring lamp changed update that we initiated");
+                return;
+            }
+    
+            // var new_onoff = new_state['on'];
+            var new_brightness = new_state;
+            // var new_hue = Math.round(new_state['color']['h']*0xFF);
+            // var new_saturation = Math.round(new_state['color']['s']*0xFF);
+            // if (that.is_on !== new_onoff) {
+            //     console.log('MQTT - NEW ON/OFF');
+            //     that.is_on = new_state['on'];
+            //     that.emit('changed-onoff', that.is_on);
+            // }
+            if (that.brightness !== new_brightness ) { 
+                console.log('MQTT - NEW BRIGHTNESS %d', new_brightness);
+                that.brightness = new_brightness;
+                that.emit('changed-brightness', that.brightness);
+            }
+            // if ( (that.hue !== new_hue ) || (that.saturation !== new_saturation) ) { 
+            //     console.log('MQTT - NEW HSV %d %d', new_hue, new_saturation);
+            //     that.hue = new_hue;
+            //     that.saturation = new_saturation;
+            //     that.emit('changed-hsv', that.hue, that.saturation, that.value);
+            // }
+            that.has_received_first_update = true;
         }
-
-        // var new_onoff = new_state['on'];
-        var new_brightness = new_state;
-        // var new_hue = Math.round(new_state['color']['h']*0xFF);
-        // var new_saturation = Math.round(new_state['color']['s']*0xFF);
-        // if (that.is_on !== new_onoff) {
-        //     console.log('MQTT - NEW ON/OFF');
-        //     that.is_on = new_state['on'];
-        //     that.emit('changed-onoff', that.is_on);
-        // }
-        if (that.brightness !== new_brightness ) { 
-            console.log('MQTT - NEW BRIGHTNESS %d', new_brightness);
-            that.brightness = new_brightness;
-            that.emit('changed-brightness', that.brightness);
+        if (topic === 'meatthermometer/done'){
+            new_state = JSON.parse(message);
+            console.log('NEW STATE: ', new_state);
+            // if the client id matches ours and we have received
+            //   at least one update before
+            if( new_state['client'] == that.clientId
+                    && that.has_received_first_update) {
+                console.log("...ignoring lamp changed update that we initiated");
+                return;
+            }
+    
+            // var new_onoff = new_state['on'];
+            var new_done = new_state;
+            // var new_hue = Math.round(new_state['color']['h']*0xFF);
+            // var new_saturation = Math.round(new_state['color']['s']*0xFF);
+            // if (that.is_on !== new_onoff) {
+            //     console.log('MQTT - NEW ON/OFF');
+            //     that.is_on = new_state['on'];
+            //     that.emit('changed-onoff', that.is_on);
+            // }
+            if (that.done !== new_done ) { 
+                console.log('MQTT - NEW DONE %d', new_done);
+                that.done = new_done;
+                that.emit('changed-done', that.done);
+            }
+            // if ( (that.hue !== new_hue ) || (that.saturation !== new_saturation) ) { 
+            //     console.log('MQTT - NEW HSV %d %d', new_hue, new_saturation);
+            //     that.hue = new_hue;
+            //     that.saturation = new_saturation;
+            //     that.emit('changed-hsv', that.hue, that.saturation, that.value);
+            // }
+            that.has_received_first_update = true;
         }
-        // if ( (that.hue !== new_hue ) || (that.saturation !== new_saturation) ) { 
-        //     console.log('MQTT - NEW HSV %d %d', new_hue, new_saturation);
-        //     that.hue = new_hue;
-        //     that.saturation = new_saturation;
-        //     that.emit('changed-hsv', that.hue, that.saturation, that.value);
-        // }
-        that.has_received_first_update = true;
     });
+
 
     this.mqtt_client = mqtt_client;
     

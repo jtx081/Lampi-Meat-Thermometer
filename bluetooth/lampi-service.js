@@ -3,6 +3,7 @@ var bleno = require('bleno');
 
 var TempCharacteristic = require('./temp-characteristic');
 var GoalCharacteristic = require('./goal-characteristic');
+var DoneCharacteristic = require('./done-characteristic');
 
 function LampiService(lampiState) {
     bleno.PrimaryService.call(this, {
@@ -10,6 +11,7 @@ function LampiService(lampiState) {
         characteristics: [
             new TempCharacteristic(lampiState),
             new GoalCharacteristic(lampiState),
+            new DoneCharacteristic(lampiState),
         ]
     });
 }
