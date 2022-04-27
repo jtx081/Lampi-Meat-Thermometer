@@ -8,16 +8,27 @@
   BoxLayout:
     orientation: 'vertical'
     Label:
-      text: app.display_target_temp
+      text: app.display_target_temp_message
     Button:
-      size_hint_y: 0.3
+      size_hint_y: 0.2
       text: "close"
       on_release: root.dismiss()
 
 <DonePopup>
   Label:
-    text: "done!" + app.display_text
+    bold: True
+    font_size: 30
+    text: "Time to eat!"
     pos_hint:{"x": 0, "top": 1}
+  Label:
+    text: "Current Temp: " + app.display_temp
+    font_size: 12
+    size_hint_y: 0.2
+  Label:
+    text: "Goal Temp: " + app.display_target_temp
+    font_size: 12
+    size_hint_y: 0.2
+    pos_hint:{"y": 0.1}
 
 BoxLayout:
   orientation: 'vertical'
@@ -33,11 +44,11 @@ BoxLayout:
     bold: True
     text: 'Meat Temperature:'
   Label:
-    size_hint_y: 0.6
+    size_hint_y: 0.5
     bold: True
     font_size: 50
-    text: app.display_text
+    text: app.display_temp
   Button:
-    size_hint_y: 0.1
+    size_hint_y: 0.2
     text: "Meat Setting Details"
     on_release: Factory.InfoPopup().open()

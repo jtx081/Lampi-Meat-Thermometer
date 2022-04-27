@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 from w1thermsensor import W1ThermSensor
 import paho.mqtt.publish as publish
