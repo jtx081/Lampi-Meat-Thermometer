@@ -5,7 +5,7 @@ var mqtt = require('mqtt');
 function LampiState() {
     events.EventEmitter.call(this);
 
-    // this.is_on = true;
+    this.is_on = 0x00;
     this.brightness = 0x00;
     // this.hue = 0xFF;
     // this.saturation = 0xFF;
@@ -74,12 +74,12 @@ function LampiState() {
 
 util.inherits(LampiState, events.EventEmitter);
 
-// LampiState.prototype.set_onoff = function(is_on) {
-//     this.is_on = is_on;
-//     var tmp = {'client': this.clientId, 'on': this.is_on };
-//     this.mqtt_client.publish('lamp/set_config', JSON.stringify(tmp));
-//     console.log('is_on = ', this.is_on, ' msg: ', JSON.stringify(tmp));
-// };
+LampiState.prototype.set_onoff = function(is_on) {
+    this.is_on = is_on;
+    // var tmp = {'client': this.clientId, 'on': this.is_on };
+    this.mqtt_client.publish('test/goal', String(this.is_on));
+    // console.log('is_on = ', this.is_on, ' msg: ', JSON.stringify(tmp));
+};
 
 // LampiState.prototype.set_brightness = function(brightness) {
 //     this.brightness = brightness;

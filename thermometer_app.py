@@ -4,6 +4,7 @@ from kivy.clock import Clock
 
 from paho.mqtt.client import Client
 import json
+import math
 
 
 class ThermometerApp(App):
@@ -25,5 +26,5 @@ class ThermometerApp(App):
         self.mqtt.subscribe('test/temperature')
 
     def message_received(self, client, userdata, message):
-        new_temp = round(json.loads(message.payload.decode('utf-8')))
+        new_temp = math.floor(json.loads(message.payload.decode('utf-8')))
         self.display_text = '{} F'.format(new_temp)
