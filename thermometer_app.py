@@ -9,6 +9,8 @@ from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
+#from kivy.uix.modalview import Dismiss
 
 import pigpio
 import time
@@ -63,14 +65,42 @@ class ThermometerApp(App):
         self.display_text = '{} F'.format(new_temp)
         self.temp = new_temp
 
-        #popup = MyPopup()
+        popup = DonePopup()
+
+        popupWindow = Popup(title="Popup Window", content=popup, size_hint=(None, None), size=(200,200), auto_dismiss=True)
+
 
         if (self.temp < self.target_temp):
+            self.pi.write(13, 0)
             self.pi.set_PWM_dutycycle(19, (self.target_temp - self.temp)/self.target_temp * self.target_temp)
+            self.pi.write(26, 0)
+
+            popupWindow.dismiss()
+
         else:
+            self.pi.write(13, 0)
             self.pi.write(19, 0)
             self.pi.write(26, 1)
-            #popup.open()
 
-            #time.sleep(30)
-            self.pi.write(26, 0)
+            popupWindow.open()
+
+
+    pi.write(13, 0)
+    pi.write(19, 0)
+    pi.write(26, 0)
+
+    # how to go back to the cycle when it temerature goes down.
+    # how to turn lights off?
+    # current temp on popup? Discription to touch outside the popup?
+
+
+class DonePopup(FloatLayout):
+    pass
+
+
+def showPopup():
+    show = MyPopup()
+
+    popupWindow = Popup(title="Popup Window", content=show)
+
+    popupWindow.open()

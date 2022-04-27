@@ -2,17 +2,24 @@
 #:import hex kivy.utils.get_color_from_hex
 #:import Factory kivy.factory.Factory
 
-<MyPopup>
+<InfoPopup@Popup>
   auto_dismiss: False
   title: "Information"
   BoxLayout:
     orientation: 'vertical'
+    Label:
+      text: "Meat Type: ____"
     Label:
       text: app.display_target_temp
     Button:
       size_hint_y: 0.3
       text: "close"
       on_release: root.dismiss()
+
+<DonePopup>
+  Label:
+    text: "done!" + app.display_text
+    pos_hint:{"x": 0, "top": 1}
 
 BoxLayout:
   orientation: 'vertical'
@@ -35,4 +42,4 @@ BoxLayout:
   Button:
     size_hint_y: 0.1
     text: "Meat Setting Details"
-    on_release: Factory.MyPopup().open()
+    on_release: Factory.InfoPopup().open()
