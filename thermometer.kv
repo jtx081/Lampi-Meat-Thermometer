@@ -1,12 +1,54 @@
 #:kivy 1.9
+#:import hex kivy.utils.get_color_from_hex
+#:import Factory kivy.factory.Factory
+
+<InfoPopup@Popup>
+  auto_dismiss: False
+  title: "Information"
+  BoxLayout:
+    orientation: 'vertical'
+    Label:
+      text: app.display_target_temp_message
+    Button:
+      size_hint_y: 0.2
+      text: "close"
+      on_release: root.dismiss()
+
+<DonePopup>
+  Label:
+    bold: True
+    font_size: 30
+    text: "Time to eat!"
+    pos_hint:{"x": 0, "top": 1}
+  Label:
+    text: "Current Temp: " + app.display_temp
+    font_size: 12
+    size_hint_y: 0.2
+  Label:
+    text: "Goal Temp: " + app.display_target_temp
+    font_size: 12
+    size_hint_y: 0.2
+    pos_hint:{"y": 0.1}
 
 BoxLayout:
   orientation: 'vertical'
+  canvas.before:
+    Color:
+      rgba: hex('#A52A2A')
+    Rectangle:
+      pos: self.pos
+      size: self.size
   Label:
     size_hint_y: 0.3
     font_size: 25
+    bold: True
     text: 'Meat Temperature:'
   Label:
-    size_hint_y: 0.7
-    font_size: 40
-    text: app.display_text
+    size_hint_y: 0.5
+    bold: True
+    font_size: 50
+    text: app.display_temp
+  Button:
+    size_hint_y: 0.2
+    text: "Meat Setting Details"
+    on_release: Factory.InfoPopup().open()

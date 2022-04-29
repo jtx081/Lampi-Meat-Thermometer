@@ -1,0 +1,67 @@
+var util = require('util');
+var bleno = require('bleno');
+
+var CHARACTERISTIC_NAME = 'Goal';
+
+function GoalCharacteristic(lampiState) {
+    GoalCharacteristic.super_.call(this, {
+        uuid: '0004A7D3-D8A4-4FEA-8174-1736E808C066',
+        properties: [ 'write', 'notify'],
+        secure: [],
+        descriptors: [
+            new bleno.Descriptor({
+                uuid: '2901',
+                value: CHARACTERISTIC_NAME,
+            }),
+            new bleno.Descriptor({
+                uuid: '2904',
+                value: new Buffer([0x04, 0x00, 0x27, 0x00, 0x01, 0x00, 0x00])
+            }),
+        ],
+    });
+
+    this._update = null;
+
+    this.changed_goal = function(goal) {
+        console.log('lampiState changed GoalCharacteristic');
+        if (this._update !== null) {
+            console.log('updating new goal uuid=', this.uuid);
+            var data = new Buffer(1);
+            data.writeUInt8(goal);
+            this._update(data);
+        }
+    }
+
+    this.lampiState = lampiState;
+
+    this.lampiState.on('changed-goal', this.changed_goal.bind(this));
+
+}
+
+util.inherits(GoalCharacteristic, bleno.Characteristic);
+
+
+GoalCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
+    if (offset) {
+        callback(this.RESULT_ATTR_NOT_LONG);
+    } else if (data.length !== 1) {
+        callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
+    } else {
+        var goal = data.readUInt8(0);
+        this.lampiState.set_goal(goal);
+        callback(this.RESULT_SUCCESS);
+    }
+};
+
+GoalCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
+    console.log('subscribe on ', CHARACTERISTIC_NAME);
+    this._update = updateValueCallback;
+}
+
+GoalCharacteristic.prototype.onUnsubscribe = function() {
+    console.log('unsubscribe on ', CHARACTERISTIC_NAME);
+    this._update = null;
+}
+
+
+module.exports = GoalCharacteristic;

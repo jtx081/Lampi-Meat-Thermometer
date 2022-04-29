@@ -1,11 +1,11 @@
 var util = require('util');
 var bleno = require('bleno');
 
-var CHARACTERISTIC_NAME = 'Temp';
+var CHARACTERISTIC_NAME = 'Done';
 
-function TempCharacteristic(lampiState) {
-  TempCharacteristic.super_.call(this, {
-    uuid: '0003A7D3-D8A4-4FEA-8174-1736E808C066',
+function DoneCharacteristic(lampiState) {
+  DoneCharacteristic.super_.call(this, {
+    uuid: "0002A7D3-D8A4-4FEA-8174-1736E808C066",
     properties: ['read', 'notify'],
     secure: [],
     descriptors: [
@@ -22,25 +22,25 @@ function TempCharacteristic(lampiState) {
 
   this._update = null;
 
-  this.changed_temperature =  function(temperature) {
-    console.log('lampiState changed TempCharacteristic');
+  this.changed_done =  function(done) {
+    console.log('lampiState changed DoneCharacteristic');
     if( this._update !== null ) {
-        console.log('updating new temperature uuid=', this.uuid);
+        console.log('updating new done uuid=', this.uuid);
         var data = new Buffer(1);
-        data.writeUInt8(temperature);
+        data.writeUInt8(done);
         this._update(data);
     } 
   }
 
   this.lampiState = lampiState;
 
-  this.lampiState.on('changed-temperature', this.changed_temperature.bind(this));
+  this.lampiState.on('changed-done', this.changed_done.bind(this));
 
 }
 
-util.inherits(TempCharacteristic, bleno.Characteristic);
+util.inherits(DoneCharacteristic, bleno.Characteristic);
 
-TempCharacteristic.prototype.onReadRequest = function(offset, callback) {
+DoneCharacteristic.prototype.onReadRequest = function(offset, callback) {
   console.log('onReadRequest');
   if (offset) {
     console.log('onReadRequest offset');
@@ -48,23 +48,22 @@ TempCharacteristic.prototype.onReadRequest = function(offset, callback) {
   }
   else {
     var data = new Buffer(1);
-    data.writeUInt8(this.lampiState.temperature);
+    data.writeUInt8(this.lampiState.done);
     console.log('onReadRequest returning ', data);
     callback(this.RESULT_SUCCESS, data);
   }
 };
 
-
-TempCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
+DoneCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
     console.log('subscribe on ', CHARACTERISTIC_NAME);
     this._update = updateValueCallback;
 }
 
-TempCharacteristic.prototype.onUnsubscribe = function() {
+DoneCharacteristic.prototype.onUnsubscribe = function() {
     console.log('unsubscribe on ', CHARACTERISTIC_NAME);
     this._update = null;
 }
 
 
-module.exports = TempCharacteristic;
+module.exports = DoneCharacteristic;
 
