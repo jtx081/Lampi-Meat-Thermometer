@@ -1,1 +1,3 @@
-# csds377-finalproject
+# Lampi Meat Thermometer
+
+LAMPI Meat Thermometer is a device that assists individuals through the meat cooking process. The device allows the user to set the desired goal temperature and then will alert the user if the temperature is reached. As a connected device, the device consists of a iOS app and lamp hardware that is powered by a Raspberry Pi 3 Model B+ and Adafruit 2.8+ PiTFT - Capacitive Touch Screen, in addition to LEDs, with connection to a temperature sensor in the form of a probe, DS18B20. Users use the app to decide the temperature of choice with guidance from dropdowns and get alerted on the iOS app and lamp with a popup message with physical triggers from LED color change from red to green color. 
