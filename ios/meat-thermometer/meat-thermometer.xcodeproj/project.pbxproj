@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B1578962817457500517818 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1578952817457500517818 /* HelpView.swift */; };
 		3B564C72280500C80039982E /* LampiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B564C71280500C80039982E /* LampiApp.swift */; };
 		3B564C74280500C80039982E /* LampiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B564C73280500C80039982E /* LampiView.swift */; };
 		3B564C76280500CC0039982E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B564C75280500CC0039982E /* Assets.xcassets */; };
 		3B564C79280500CC0039982E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B564C78280500CC0039982E /* Preview Assets.xcassets */; };
 		3B564C822805032B0039982E /* LampiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B564C812805032B0039982E /* LampiManager.swift */; };
 		3B564C84280503E40039982E /* Lampi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B564C83280503E40039982E /* Lampi.swift */; };
+		3BAD882E28171456002B0270 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAD882D28171456002B0270 /* HomeView.swift */; };
+		3BAD8830281721AC002B0270 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAD882F281721AC002B0270 /* SelectView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B1578952817457500517818 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		3B564C6E280500C80039982E /* meat-thermometer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "meat-thermometer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B564C71280500C80039982E /* LampiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampiApp.swift; sourceTree = "<group>"; };
 		3B564C73280500C80039982E /* LampiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampiView.swift; sourceTree = "<group>"; };
@@ -23,6 +27,8 @@
 		3B564C78280500CC0039982E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3B564C812805032B0039982E /* LampiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampiManager.swift; sourceTree = "<group>"; };
 		3B564C83280503E40039982E /* Lampi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lampi.swift; sourceTree = "<group>"; };
+		3BAD882D28171456002B0270 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		3BAD882F281721AC002B0270 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,9 @@
 				3B564C83280503E40039982E /* Lampi.swift */,
 				3B564C812805032B0039982E /* LampiManager.swift */,
 				3B564C71280500C80039982E /* LampiApp.swift */,
+				3BAD882D28171456002B0270 /* HomeView.swift */,
+				3B1578952817457500517818 /* HelpView.swift */,
+				3BAD882F281721AC002B0270 /* SelectView.swift */,
 				3B564C73280500C80039982E /* LampiView.swift */,
 				3B564C75280500CC0039982E /* Assets.xcassets */,
 				3B564C77280500CC0039982E /* Preview Content */,
@@ -144,9 +153,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B564C74280500C80039982E /* LampiView.swift in Sources */,
+				3B1578962817457500517818 /* HelpView.swift in Sources */,
 				3B564C84280503E40039982E /* Lampi.swift in Sources */,
+				3BAD882E28171456002B0270 /* HomeView.swift in Sources */,
 				3B564C72280500C80039982E /* LampiApp.swift in Sources */,
 				3B564C822805032B0039982E /* LampiManager.swift in Sources */,
+				3BAD8830281721AC002B0270 /* SelectView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,7 +287,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"meat-thermometer/Preview Content\"";
-				DEVELOPMENT_TEAM = APGQ9MFJ4P;
+				DEVELOPMENT_TEAM = G3S6JU89R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect to Lampi via bluetooth";
@@ -289,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wonyoung.meat-thermometer";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Joanna.meat-thermometer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -305,7 +317,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"meat-thermometer/Preview Content\"";
-				DEVELOPMENT_TEAM = APGQ9MFJ4P;
+				DEVELOPMENT_TEAM = G3S6JU89R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect to Lampi via bluetooth";
@@ -319,7 +331,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wonyoung.meat-thermometer";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Joanna.meat-thermometer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

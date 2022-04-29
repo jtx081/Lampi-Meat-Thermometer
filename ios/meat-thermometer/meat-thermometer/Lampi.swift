@@ -11,7 +11,11 @@ class Lampi: NSObject, ObservableObject {
     let name: String
     @Published var state = State() {
         didSet {
-            if oldValue != state {
+            
+            if oldValue.goal != state.goal {
+                print(oldValue.goal)
+                print(state.goal)
+              
                 updateDevice()
             }
         }
@@ -30,9 +34,9 @@ class Lampi: NSObject, ObservableObject {
             setupPeripheral()
         }
     }
-//    private var hsvCharacteristic: CBCharacteristic?
-    private var brightnessCharacteristic: CBCharacteristic?
-//    private var onOffCharacteristic: CBCharacteristic?
+    private var DoneCharacteristic: CBCharacteristic?
+    private var TemperatureCharacteristic: CBCharacteristic?
+    private var GoalCharacteristic: CBCharacteristic?
 
     // MARK: State Tracking
     private var skipNextDeviceUpdate = false
@@ -61,77 +65,39 @@ class Lampi: NSObject, ObservableObject {
 
 extension Lampi {
     static let SERVICE_UUID = CBUUID(string: "0001A7D3-D8A4-4FEA-8174-1736E808C066")
-//    static let HSV_UUID = CBUUID(string: "0002A7D3-D8A4-4FEA-8174-1736E808C066")
-    static let BRIGHTNESS_UUID = CBUUID(string: "0003A7D3-D8A4-4FEA-8174-1736E808C066")
-//    static let ON_OFF_UUID = CBUUID(string: "0004A7D3-D8A4-4FEA-8174-1736E808C066")
+    static let DONE_UUID = CBUUID(string: "0002A7D3-D8A4-4FEA-8174-1736E808C066")
+    static let TEMPERATURE_UUID = CBUUID(string: "0003A7D3-D8A4-4FEA-8174-1736E808C066")
+    static let GOAL_UUID = CBUUID(string: "0004A7D3-D8A4-4FEA-8174-1736E808C066")
 
     private var shouldSkipUpdateDevice: Bool {
         return skipNextDeviceUpdate || pendingBluetoothUpdate
     }
 
     private func updateDevice(force: Bool = false) {
-        if state.isConnected && (force || !shouldSkipUpdateDevice) {
-            pendingBluetoothUpdate = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-//                self?.writeOnOff()
-                self?.writeBrightness()
-//                self?.writeHSV()
-
-                self?.pendingBluetoothUpdate = false
-            }
-        }
-
+        pendingBluetoothUpdate = false
+        writeGoal()
         skipNextDeviceUpdate = false
     }
 
-//    private func writeOnOff() {
-//        if let onOffCharacteristic = onOffCharacteristic {
-//            let data = Data(bytes: &state.isOn, count: 1)
-//            lampiPeripheral?.writeValue(data, for: onOffCharacteristic, type: .withResponse)
-//        }
-//    }
-
-//    private func writeHSV() {
-//        if let hsvCharacteristic = hsvCharacteristic {
-//            var hsv: UInt32 = 0
-//            let hueInt = UInt32(state.hue * 255.0)
-//            let satInt = UInt32(state.saturation * 255.0)
-//            let valueInt = UInt32(255)
-//
-//            hsv = hueInt
-//            hsv += satInt << 8
-//            hsv += valueInt << 16
-//
-//            let data = Data(bytes: &hsv, count: 3)
-//            lampiPeripheral?.writeValue(data, for: hsvCharacteristic, type: .withResponse)
-//        }
-//    }
-
-    private func writeBrightness() {
-        if let brightnessCharacteristic = brightnessCharacteristic {
+    private func writeGoal() {
+        if let GoalCharacteristic = GoalCharacteristic {
             print("writing")
-            var brightnessChar = UInt8(state.brightness * 255.0)
-            let data = Data(bytes: &brightnessChar, count: 1)
-            lampiPeripheral?.writeValue(data, for: brightnessCharacteristic, type: .withResponse)
+            var GoalChar = UInt8(state.goal)
+            let data = Data(bytes: &GoalChar, count: 1)
+            lampiPeripheral?.writeValue(data, for: GoalCharacteristic, type: .withResponse)
         }
     }
+
 }
 
 extension Lampi {
     struct State: Equatable {
         var isConnected = false
-        var isOn = false
-        var hue: Double = 0.0
-        var saturation: Double = 1.0
-        var brightness: Double = 1.00
+        
+        var goal: Int = 0
+        var isDone: Int = 0
+        var temperature: Double = 1.00
 
-        var color: Color {
-            Color(hue: hue, saturation: saturation, brightness: brightness)
-        }
-
-        var baseHueColor: Color {
-            Color(hue: hue, saturation: 1.0, brightness: 1.0)
-        }
     }
 }
 
@@ -181,32 +147,28 @@ extension Lampi: CBPeripheralDelegate {
 
         for characteristic in characteristics {
             switch characteristic.uuid {
-//            case Lampi.HSV_UUID:
-//                self.hsvCharacteristic = characteristic
-//                peripheral.readValue(for: characteristic)
-//                peripheral.setNotifyValue(true, for: characteristic)
+                
+                case Lampi.TEMPERATURE_UUID:
+                    self.TemperatureCharacteristic = characteristic
+                    peripheral.readValue(for: characteristic)
+                    peripheral.setNotifyValue(true, for: characteristic)
+                    print("Found: \(characteristic)")
 
-            case Lampi.BRIGHTNESS_UUID:
-                self.brightnessCharacteristic = characteristic
-                peripheral.readValue(for: characteristic)
-                peripheral.setNotifyValue(true, for: characteristic)
-                print("Found: \(characteristic)")
-//
-//            case Lampi.ON_OFF_UUID:
-//                self.onOffCharacteristic = characteristic
-//                peripheral.readValue(for: characteristic)
-//                peripheral.setNotifyValue(true, for: characteristic)
+                case Lampi.GOAL_UUID:
+                    self.GoalCharacteristic = characteristic
+                    print("Found: \(characteristic)")
+
+                case Lampi.DONE_UUID:
+                    self.DoneCharacteristic = characteristic
+                    peripheral.readValue(for: characteristic)
+                    peripheral.setNotifyValue(true, for: characteristic)
+                    print("Found: \(characteristic)")
 
             default:
                 continue
             }
         }
 
-//        // not connected until all characteristics are discovered
-//        if self.hsvCharacteristic != nil && self.brightnessCharacteristic != nil && self.onOffCharacteristic != nil {
-//            skipNextDeviceUpdate = true
-//            state.isConnected = true
-//        }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -216,41 +178,17 @@ extension Lampi: CBPeripheralDelegate {
               !updatedValue.isEmpty else { return }
 
         switch characteristic.uuid {
-//        case Lampi.HSV_UUID:
-//
-//            var newState = state
-//
-//            let hsv = parseHSV(for: updatedValue)
-//            newState.hue = hsv.hue
-//            newState.saturation = hsv.saturation
-//
-//            state = newState
 
-        case Lampi.BRIGHTNESS_UUID:
+            case Lampi.TEMPERATURE_UUID:
+                state.temperature = Double(updatedValue[0])
+                print("temp: \(state.temperature)")
             
-//            state.brightness = parseBrightness(for: updatedValue)
-            state.brightness = Double(updatedValue[0])
-            print("temp: \(state.brightness)")
-//
-//        case Lampi.ON_OFF_UUID:
-//            state.isOn = parseOnOff(for: updatedValue)
+            case Lampi.DONE_UUID:
+                state.isDone = Int(updatedValue[0])
+                print("isDone: \(state.isDone)")
 
         default:
             print("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
-    }
-
-    private func parseOnOff(for value: Data) -> Bool {
-        return value.first == 1
-    }
-
-    private func parseHSV(for value: Data) -> (hue: Double, saturation: Double) {
-        return (hue: Double(value[0]) / 255.0,
-                saturation: Double(value[1]) / 255.0)
-    }
-
-    private func parseBrightness(for value: Data) -> Double {
-        print("value: \(value[0])")
-        return Double(value[0])
     }
 }
