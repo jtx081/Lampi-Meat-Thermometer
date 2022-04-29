@@ -22,37 +22,24 @@ function GoalCharacteristic(lampiState) {
 
     this._update = null;
 
-    this.changed_onoff = function(onoff) {
+    this.changed_goal = function(goal) {
         console.log('lampiState changed GoalCharacteristic');
         if (this._update !== null) {
-            console.log('updating new onoff uuid=', this.uuid);
+            console.log('updating new goal uuid=', this.uuid);
             var data = new Buffer(1);
-            data.writeUInt8(onoff);
+            data.writeUInt8(goal);
             this._update(data);
         }
     }
 
     this.lampiState = lampiState;
 
-    this.lampiState.on('changed-onoff', this.changed_onoff.bind(this));
+    this.lampiState.on('changed-goal', this.changed_goal.bind(this));
 
 }
 
 util.inherits(GoalCharacteristic, bleno.Characteristic);
 
-// GoalCharacteristic.prototype.onReadRequest = function(offset, callback) {
-//   console.log('onReadRequest');
-//   if (offset) {
-//     console.log('onReadRequest offset');
-//     callback(this.RESULT_ATTR_NOT_LONG, null);
-//   }
-//   else {
-//     var data = new Buffer(1);
-//     data.writeUInt8(this.lampiState.brightness);
-//     console.log('onReadRequest returning ', data);
-//     callback(this.RESULT_SUCCESS, data);
-//   }
-// };
 
 GoalCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
     if (offset) {
@@ -60,8 +47,8 @@ GoalCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResp
     } else if (data.length !== 1) {
         callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
     } else {
-        var onoff = data.readUInt8(0);
-        this.lampiState.set_onoff(onoff);
+        var goal = data.readUInt8(0);
+        this.lampiState.set_goal(goal);
         callback(this.RESULT_SUCCESS);
     }
 };

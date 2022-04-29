@@ -22,19 +22,19 @@ function TempCharacteristic(lampiState) {
 
   this._update = null;
 
-  this.changed_brightness =  function(brightness) {
+  this.changed_temperature =  function(temperature) {
     console.log('lampiState changed TempCharacteristic');
     if( this._update !== null ) {
-        console.log('updating new brightness uuid=', this.uuid);
+        console.log('updating new temperature uuid=', this.uuid);
         var data = new Buffer(1);
-        data.writeUInt8(brightness);
+        data.writeUInt8(temperature);
         this._update(data);
     } 
   }
 
   this.lampiState = lampiState;
 
-  this.lampiState.on('changed-brightness', this.changed_brightness.bind(this));
+  this.lampiState.on('changed-temperature', this.changed_temperature.bind(this));
 
 }
 
@@ -48,25 +48,12 @@ TempCharacteristic.prototype.onReadRequest = function(offset, callback) {
   }
   else {
     var data = new Buffer(1);
-    data.writeUInt8(this.lampiState.brightness);
+    data.writeUInt8(this.lampiState.temperature);
     console.log('onReadRequest returning ', data);
     callback(this.RESULT_SUCCESS, data);
   }
 };
 
-// TempCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
-//     if(offset) {
-//         callback(this.RESULT_ATTR_NOT_LONG);
-//     }
-//     else if (data.length !== 1) {
-//         callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
-//     }
-//     else {
-//         var brightness = data.readUInt8(0);
-//         this.lampiState.set_brightness( brightness );
-//         callback(this.RESULT_SUCCESS);
-//     }
-// };
 
 TempCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
     console.log('subscribe on ', CHARACTERISTIC_NAME);

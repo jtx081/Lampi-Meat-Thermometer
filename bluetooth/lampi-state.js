@@ -5,11 +5,10 @@ var mqtt = require('mqtt');
 function LampiState() {
     events.EventEmitter.call(this);
 
-    this.is_on = 0x00;
-    this.brightness = 0x00;
+    this.goal = 0x00;
+    this.temperature = 0x00;
     this.done = 0x00;
-    // this.hue = 0xFF;
-    // this.saturation = 0xFF;
+
     this.value = 0xFF;
     this.clientId = 'lamp_bt_peripheral';
     this.has_received_first_update = false;
@@ -40,67 +39,41 @@ function LampiState() {
         if (topic === 'meatthermometer/temperature'){
             new_state = JSON.parse(message);
             console.log('NEW STATE: ', new_state);
-            // if the client id matches ours and we have received
-            //   at least one update before
+  
             if( new_state['client'] == that.clientId
                     && that.has_received_first_update) {
                 console.log("...ignoring lamp changed update that we initiated");
                 return;
             }
     
-            // var new_onoff = new_state['on'];
-            var new_brightness = new_state;
-            // var new_hue = Math.round(new_state['color']['h']*0xFF);
-            // var new_saturation = Math.round(new_state['color']['s']*0xFF);
-            // if (that.is_on !== new_onoff) {
-            //     console.log('MQTT - NEW ON/OFF');
-            //     that.is_on = new_state['on'];
-            //     that.emit('changed-onoff', that.is_on);
-            // }
-            if (that.brightness !== new_brightness ) { 
-                console.log('MQTT - NEW BRIGHTNESS %d', new_brightness);
-                that.brightness = new_brightness;
-                that.emit('changed-brightness', that.brightness);
+            var new_temperature = new_state;
+   
+            if (that.temperature !== new_temperature ) { 
+                console.log('MQTT - NEW TEMPERATURE %d', new_temperature);
+                that.temperature = new_temperature;
+                that.emit('changed-temperature', that.temperature);
             }
-            // if ( (that.hue !== new_hue ) || (that.saturation !== new_saturation) ) { 
-            //     console.log('MQTT - NEW HSV %d %d', new_hue, new_saturation);
-            //     that.hue = new_hue;
-            //     that.saturation = new_saturation;
-            //     that.emit('changed-hsv', that.hue, that.saturation, that.value);
-            // }
+
             that.has_received_first_update = true;
         }
         if (topic === 'meatthermometer/done'){
             new_state = JSON.parse(message);
             console.log('NEW STATE: ', new_state);
-            // if the client id matches ours and we have received
-            //   at least one update before
+ 
             if( new_state['client'] == that.clientId
                     && that.has_received_first_update) {
                 console.log("...ignoring lamp changed update that we initiated");
                 return;
             }
     
-            // var new_onoff = new_state['on'];
             var new_done = new_state;
-            // var new_hue = Math.round(new_state['color']['h']*0xFF);
-            // var new_saturation = Math.round(new_state['color']['s']*0xFF);
-            // if (that.is_on !== new_onoff) {
-            //     console.log('MQTT - NEW ON/OFF');
-            //     that.is_on = new_state['on'];
-            //     that.emit('changed-onoff', that.is_on);
-            // }
+   
             if (that.done !== new_done ) { 
                 console.log('MQTT - NEW DONE %d', new_done);
                 that.done = new_done;
                 that.emit('changed-done', that.done);
             }
-            // if ( (that.hue !== new_hue ) || (that.saturation !== new_saturation) ) { 
-            //     console.log('MQTT - NEW HSV %d %d', new_hue, new_saturation);
-            //     that.hue = new_hue;
-            //     that.saturation = new_saturation;
-            //     that.emit('changed-hsv', that.hue, that.saturation, that.value);
-            // }
+
             that.has_received_first_update = true;
         }
     });
@@ -112,28 +85,10 @@ function LampiState() {
 
 util.inherits(LampiState, events.EventEmitter);
 
-LampiState.prototype.set_onoff = function(is_on) {
-    this.is_on = is_on;
-    // var tmp = {'client': this.clientId, 'on': this.is_on };
-    this.mqtt_client.publish('meatthermometer/goal', String(this.is_on));
-    // console.log('is_on = ', this.is_on, ' msg: ', JSON.stringify(tmp));
+LampiState.prototype.set_goal = function(goal) {
+    this.goal = goal;
+    this.mqtt_client.publish('meatthermometer/goal', String(this.goal));
 };
 
-// LampiState.prototype.set_brightness = function(brightness) {
-//     this.brightness = brightness;
-//     var tmp = {'client': this.clientId, 'brightness' : this.brightness / 0xFF};
-//     this.mqtt_client.publish('lamp/set_config', JSON.stringify(tmp));
-//     console.log('brightness = ', this.brightness);
-// };
-
-// LampiState.prototype.set_hsv = function(hue, saturation, value) {
-//     this.hue = hue;
-//     this.saturation = saturation;
-//     this.value = value;
-//     var tmp = {'client': this.clientId,
-//                'color' : {'h': this.hue / 0xFF, 's': this.saturation / 0xFF}};
-//     this.mqtt_client.publish('lamp/set_config', JSON.stringify(tmp));
-//     console.log('hsv = ', this.hue, this.saturation, this.value);
-// };
 
 module.exports = LampiState;
